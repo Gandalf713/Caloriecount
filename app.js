@@ -12,7 +12,6 @@ window.onload = loadTodayData;
 document.getElementById('add-food').addEventListener('click', addFood);
 document.getElementById('calorie-goal').addEventListener('input', setGoal);
 document.getElementById('view-history').addEventListener('click', toggleHistory);
-document.getElementById('toggle-theme').addEventListener('click', toggleDarkMode);
 document.getElementById('show-trend').addEventListener('click', showTrend);
 
 if ('Notification' in window && Notification.permission !== 'granted') {
@@ -81,10 +80,6 @@ function loadTodayData() {
   }
 }
 
-function toggleDarkMode() {
-  document.body.classList.toggle('dark');
-}
-
 function showTrend() {
   const ctx = document.getElementById('calorie-trend-chart').getContext('2d');
   const dates = [];
@@ -110,9 +105,14 @@ function showTrend() {
   document.getElementById('chart-container').style.display = 'block';
 }
 
+function toggleHistory() {
+  const historyDiv = document.getElementById('chart-container');
+  historyDiv.style.display = historyDiv.style.display === 'none' ? 'block' : 'none';
+}
+
 function sendReminder() {
   if (Notification.permission === 'granted') {
     new Notification('Don’t forget to log your meals!');
   }
 }
-setInterval(sendReminder, 4 * 60 * 60 * 1000);
+setInterval(sendReminder, 4 * 60 * 60 * 1000); // Reminder every 4 hours
