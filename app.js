@@ -39,7 +39,8 @@ function addFood() {
 function updateDisplay() {
   document.getElementById('goal-display').textContent = dailyGoal;
   document.getElementById('consumed-display').textContent = totalConsumed;
-  document.getElementById('remaining-display').textContent = Math.max(dailyGoal - totalConsumed, 0);
+  const remaining = Math.max(dailyGoal - totalConsumed, 0);
+  document.getElementById('remaining-display').textContent = remaining;
 }
 
 function clearInputs() {
