@@ -13,9 +13,18 @@ document.getElementById('add-food').addEventListener('click', addFood);
 document.getElementById('calorie-goal').addEventListener('input', setGoal);
 document.getElementById('view-history').addEventListener('click', toggleHistory);
 document.getElementById('show-trend').addEventListener('click', showTrend);
+document.getElementById('view-chart').addEventListener('click', toggleChart);
+
+
 
 if ('Notification' in window && Notification.permission !== 'granted') {
   Notification.requestPermission();
+}
+
+function toggleChart() {
+  const chartContainer = document.getElementById('chart-container');
+  chartContainer.classList.toggle('show');  // Add or remove 'show' class
+  loadChart();
 }
 
 function setGoal() {
