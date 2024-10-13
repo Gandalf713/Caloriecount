@@ -7,6 +7,12 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark {
+  background-color: #121212;
+  color: white;
 }
 
 .container {
@@ -17,58 +23,11 @@ body {
   max-width: 400px;
   width: 90%;
   text-align: center;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-h1 {
-  text-align: center;
-}
-
-.input-section {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin: 10px 0 5px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #218838;
-}
-
-.summary {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background-color: #e9ecef;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
+.container.dark {
+  background-color: #1e1e1e;
 }
 
 canvas {
@@ -76,18 +35,13 @@ canvas {
   margin: 0 auto 10px;
 }
 
-.calories-remaining {
-  margin-top: -15px;
-}
-
-.calories-remaining h2 {
-  margin: 5px 0;
-  font-size: 20px;
-}
-
-.calories-remaining p {
-  font-size: 36px;
-  font-weight: bold;
-  margin: 0;
-  color: #28a745;
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+  canvas {
+    width: 100%;
+    height: auto;
+  }
 }
