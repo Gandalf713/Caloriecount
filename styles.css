@@ -1,47 +1,27 @@
+/* Enable Dark Mode by Default */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: #121212;
+  color: white;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark {
-  background-color: #121212;
-  color: white;
 }
 
 .container {
-  background-color: white;
+  background-color: #1e1e1e;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   max-width: 400px;
   width: 90%;
   text-align: center;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.container.dark {
-  background-color: #1e1e1e;
 }
 
 canvas {
   display: block;
   margin: 0 auto 10px;
-}
-
-@media (max-width: 600px) {
-  .container {
-    width: 100%;
-    padding: 10px;
-  }
-  canvas {
-    width: 100%;
-    height: auto;
-  }
 }
