@@ -68,3 +68,8 @@ li {
   padding: 10px;
   border-radius: 5px;
 }
+
+canvas {
+  display: block;
+  margin: 20px auto;
+}
