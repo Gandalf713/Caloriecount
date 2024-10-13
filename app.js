@@ -1,6 +1,6 @@
 let dailyGoal = 0;
 let totalConsumed = 0;
-const today = new Date().toLocaleDateString(); // Get today's date
+const today = new Date().toLocaleDateString(); // Today's date as a key
 
 const canvas = document.getElementById('progress-slider');
 const ctx = canvas.getContext('2d');
@@ -83,7 +83,7 @@ function saveData() {
     consumed: totalConsumed,
     foods: Array.from(document.querySelectorAll('#food-list li')).map(item => item.textContent)
   };
-  localStorage.setItem(today, JSON.stringify(data));
+  localStorage.setItem(today, JSON.stringify(data)); // Save data under today's date
 }
 
 function loadTodayData() {
