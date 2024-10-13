@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calorie Tracker</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js CDN -->
 </head>
 <body>
   <div class="container">
+
+    <!-- Dark Mode Toggle -->
+    <button id="toggle-theme">Toggle Dark Mode</button>
 
     <!-- Progress Slider Section -->
     <canvas id="progress-slider" width="300" height="150"></canvas>
@@ -40,9 +44,11 @@
     <ul id="food-list"></ul>
 
     <button id="view-history">View History</button>
-    <div id="history" style="display:none;">
-      <h3>History</h3>
-      <ul id="history-list"></ul>
+    <button id="show-trend">Show Calorie Trends</button>
+
+    <div id="chart-container" style="display:none;">
+      <h3>Calorie Trends Over Time</h3>
+      <canvas id="calorie-trend-chart"></canvas>
     </div>
 
   </div>
