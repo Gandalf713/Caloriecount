@@ -34,6 +34,7 @@ function addFood() {
     const foodList = document.getElementById('food-list');
     const listItem = document.createElement('li');
     listItem.textContent = `${foodItem} - ${calories} calories`;
+    listItem.addEventListener('click', () => deleteFood(listItem, calories));
     foodList.appendChild(listItem);
 
     saveData();
@@ -41,6 +42,14 @@ function addFood() {
     drawProgress();
     clearInputs();
   }
+}
+
+function deleteFood(listItem, calories) {
+  totalConsumed -= calories;
+  listItem.remove();
+  saveData();
+  updateDisplay();
+  drawProgress();
 }
 
 function updateDisplay() {
@@ -96,12 +105,18 @@ function loadTodayData() {
       const foodList = document.getElementById('food-list');
       const listItem = document.createElement('li');
       listItem.textContent = food;
+      listItem.addEventListener('click', () => deleteFood(listItem, parseCaloriesFromEntry(food)));
       foodList.appendChild(listItem);
     });
 
     updateDisplay();
     drawProgress();
   }
+}
+
+function parseCaloriesFromEntry(entry) {
+  const calories = entry.match(/\d+/); // Extract the first number (calories) from the entry
+  return calories ? parseInt(calories[0]) : 0;
 }
 
 function toggleHistory() {
@@ -119,8 +134,13 @@ function loadHistory() {
     if (key !== today) { // Skip today's data in history
       const data = JSON.parse(localStorage.getItem(key));
       const listItem = document.createElement('li');
-      listItem.innerHTML = `<strong>${key}:</strong> Goal: ${data.goal}, Consumed: ${data.consumed} calories`;
+      listItem.innerHTML = `<strong>${key}:</strong> Goal: ${data.goal}, Consumed: ${data.consumed} calories <button onclick="deleteDay('${key}')">Delete</button>`;
       historyList.appendChild(listItem);
     }
   }
+}
+
+function deleteDay(key) {
+  localStorage.removeItem(key);
+  loadHistory(); // Reload the history list after deletion
 }
