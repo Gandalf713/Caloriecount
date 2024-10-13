@@ -1,6 +1,6 @@
 let dailyGoal = 0;
 let totalConsumed = 0;
-const today = new Date().toLocaleDateString(); // Today's date as the key
+const today = new Date().toLocaleDateString(); // Today's date as a key
 
 const canvas = document.getElementById('progress-slider');
 const ctx = canvas.getContext('2d');
@@ -8,13 +8,13 @@ const radius = 100;
 const centerX = canvas.width / 2;
 const centerY = canvas.height;
 
+// Load saved data for today on page load
 window.onload = loadTodayData;
 
+// Event Listeners
 document.getElementById('add-food').addEventListener('click', addFood);
 document.getElementById('calorie-goal').addEventListener('input', setGoal);
 document.getElementById('view-history').addEventListener('click', toggleHistory);
-document.getElementById('view-chart').addEventListener('click', toggleChart);
-document.getElementById('enable-notifications').addEventListener('click', enableNotifications);
 
 function setGoal() {
   const goal = document.getElementById('calorie-goal').value;
@@ -66,15 +66,19 @@ function clearInputs() {
 
 function drawProgress() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw background semicircle
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, Math.PI, 2 * Math.PI);
   ctx.strokeStyle = '#ddd';
   ctx.lineWidth = 15;
   ctx.stroke();
 
+  // Calculate progress angle
   const progress = Math.min(totalConsumed / dailyGoal, 1);
   const endAngle = Math.PI + progress * Math.PI;
 
+  // Draw progress semicircle
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, Math.PI, endAngle);
   ctx.strokeStyle = '#28a745';
@@ -88,7 +92,7 @@ function saveData() {
     consumed: totalConsumed,
     foods: Array.from(document.querySelectorAll('#food-list li')).map(item => item.textContent)
   };
-  localStorage.setItem(today, JSON.stringify(data));
+  localStorage.setItem(today, JSON.stringify(data)); // Save data under today's date
 }
 
 function loadTodayData() {
@@ -111,7 +115,7 @@ function loadTodayData() {
 }
 
 function parseCaloriesFromEntry(entry) {
-  const calories = entry.match(/\d+/);
+  const calories = entry.match(/\d+/); // Extract the first number (calories) from the entry
   return calories ? parseInt(calories[0]) : 0;
 }
 
@@ -123,76 +127,20 @@ function toggleHistory() {
 
 function loadHistory() {
   const historyList = document.getElementById('history-list');
-  historyList.innerHTML = '';
+  historyList.innerHTML = ''; // Clear previous history
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key !== today) {
+    if (key !== today) { // Skip today's data in history
       const data = JSON.parse(localStorage.getItem(key));
       const listItem = document.createElement('li');
-      listItem.innerHTML = `<strong>${key}:</strong> Goal: ${data.goal}, Consumed: ${data.consumed} calories`;
+      listItem.innerHTML = `<strong>${key}:</strong> Goal: ${data.goal}, Consumed: ${data.consumed} calories <button onclick="deleteDay('${key}')">Delete</button>`;
       historyList.appendChild(listItem);
     }
   }
 }
 
-function toggleChart() {
-  const chartContainer = document.getElementById('chart-container');
-  chartContainer.classList.toggle('show');
-  loadChart();
-}
-
-function loadChart() {
-  const dates = [];
-  const consumedCalories = [];
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const data = JSON.parse(localStorage.getItem(key));
-    dates.push(key);
-    consumedCalories.push(data.consumed);
-  }
-
-  const ctx = document.getElementById('calorie-chart').getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: dates,
-      datasets: [{
-        label: 'Calories Consumed',
-        data: consumedCalories,
-        borderColor: 'green',
-        backgroundColor: 'rgba(0, 128, 0, 0.1)',
-        borderWidth: 2,
-        fill: true,
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-}
-
-function enableNotifications() {
-  if ('Notification' in window && Notification.permission !== 'granted') {
-    Notification.requestPermission().then(permission => {
-      if (permission === 'granted') {
-        alert('Notifications enabled!');
-        scheduleReminders();
-      }
-    });
-  }
-}
-
-function scheduleReminders() {
-  setInterval(() => {
-    if (Notification.permission === 'granted') {
-      new Notification('Don’t forget to log your meals today!');
-    }
-  }, 4 * 60 * 60 * 1000);
+function deleteDay(key) {
+  localStorage.removeItem(key);
+  loadHistory(); // Reload the history list after deletion
 }
