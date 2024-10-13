@@ -1,5 +1,6 @@
 let dailyGoal = 0;
 let totalConsumed = 0;
+const today = new Date().toLocaleDateString(); // Get today's date
 
 const canvas = document.getElementById('progress-slider');
 const ctx = canvas.getContext('2d');
@@ -7,13 +8,18 @@ const radius = 100;
 const centerX = canvas.width / 2;
 const centerY = canvas.height;
 
+// Load saved data for today on page load
+window.onload = loadTodayData;
+
 // Event Listeners
 document.getElementById('add-food').addEventListener('click', addFood);
 document.getElementById('calorie-goal').addEventListener('input', setGoal);
+document.getElementById('view-history').addEventListener('click', toggleHistory);
 
 function setGoal() {
   const goal = document.getElementById('calorie-goal').value;
   dailyGoal = parseInt(goal) || 0;
+  saveData();
   updateDisplay();
   drawProgress();
 }
@@ -30,6 +36,7 @@ function addFood() {
     listItem.textContent = `${foodItem} - ${calories} calories`;
     foodList.appendChild(listItem);
 
+    saveData();
     updateDisplay();
     drawProgress();
     clearInputs();
@@ -68,4 +75,52 @@ function drawProgress() {
   ctx.strokeStyle = '#28a745';
   ctx.lineWidth = 15;
   ctx.stroke();
+}
+
+function saveData() {
+  const data = {
+    goal: dailyGoal,
+    consumed: totalConsumed,
+    foods: Array.from(document.querySelectorAll('#food-list li')).map(item => item.textContent)
+  };
+  localStorage.setItem(today, JSON.stringify(data));
+}
+
+function loadTodayData() {
+  const data = JSON.parse(localStorage.getItem(today));
+  if (data) {
+    dailyGoal = data.goal;
+    totalConsumed = data.consumed;
+
+    data.foods.forEach(food => {
+      const foodList = document.getElementById('food-list');
+      const listItem = document.createElement('li');
+      listItem.textContent = food;
+      foodList.appendChild(listItem);
+    });
+
+    updateDisplay();
+    drawProgress();
+  }
+}
+
+function toggleHistory() {
+  const historyDiv = document.getElementById('history');
+  historyDiv.style.display = historyDiv.style.display === 'none' ? 'block' : 'none';
+  loadHistory();
+}
+
+function loadHistory() {
+  const historyList = document.getElementById('history-list');
+  historyList.innerHTML = ''; // Clear previous history
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key !== today) { // Skip today's data in history
+      const data = JSON.parse(localStorage.getItem(key));
+      const listItem = document.createElement('li');
+      listItem.innerHTML = `<strong>${key}:</strong> Goal: ${data.goal}, Consumed: ${data.consumed} calories`;
+      historyList.appendChild(listItem);
+    }
+  }
 }
